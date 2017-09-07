@@ -37,6 +37,7 @@ public class FavoriteQuestionsActivity extends AppCompatActivity {
     private ChildEventListener mEventListener = new ChildEventListener() {
         @Override
         public void onChildAdded(DataSnapshot dataSnapshot, String s) {
+
             HashMap map = (HashMap) dataSnapshot.getValue();
             String title = (String) map.get("title");
             String body = (String) map.get("body");
@@ -62,7 +63,6 @@ public class FavoriteQuestionsActivity extends AppCompatActivity {
                     answerArrayList.add(answer);
                 }
             }
-
             Question question = new Question(title, body, name, uid, dataSnapshot.getKey(), mGenre, bytes, answerArrayList);
             mQuestionArrayList.add(question);
             mAdapter.notifyDataSetChanged();
@@ -117,16 +117,17 @@ public class FavoriteQuestionsActivity extends AppCompatActivity {
 
 
         setTitle("お気に入り");
-
+/*
         //渡ってきたQuestionのオブジェクトを保持する
         Bundle extras = getIntent().getExtras();
         mQuestionArrayList = (ArrayList<Question>) extras.get("question");
-
+*/
         mAuth = FirebaseAuth.getInstance();
         FirebaseUser user = mAuth.getCurrentUser();
         DatabaseReference mDatabaseReference = FirebaseDatabase.getInstance().getReference();
-        DatabaseReference mFavoriteRef = mDatabaseReference.child(Const.FavoritesPATH).child(user.getUid()).child(mQuestion.getQuestionUid());
-/*
+        DatabaseReference mFavoriteRef = mDatabaseReference.child(Const.FavoritesPATH).child(user.getUid());
+
+
         for (int i = 1; i <= 4; i++) {
             // 選択したジャンルにリスナーを登録する
             if (mGenreRef != null) {
@@ -136,13 +137,12 @@ public class FavoriteQuestionsActivity extends AppCompatActivity {
             mGenreRef = mDatabaseReference.child(Const.ContentsPATH).child(String.valueOf(i));
             mGenreRef.addChildEventListener(mEventListener);
         }
-*/
-        mFavoriteRef.addChildEventListener(mEventListener);
+        //mFavoriteRef.addChildEventListener(mEventListener);
 
         // 質問のリストをクリアしてから再度Adapterにセットし、AdapterをListViewにセットし直す
         //mQuestionArrayList.clear();
-        //mAdapter.setQuestionArrayList(mQuestionArrayList);
-        //mListView.setAdapter(mAdapter);
+        mAdapter.setQuestionArrayList(mQuestionArrayList);
+        mListView.setAdapter(mAdapter);
 
         // ListViewの準備
         mListView = (ListView) findViewById(R.id.listView);

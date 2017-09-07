@@ -119,7 +119,6 @@ public class QuestionDetailActivity extends AppCompatActivity {
         // 渡ってきたQuestionのオブジェクトを保持する
         Bundle extras = getIntent().getExtras();
         mQuestion = (Question) extras.get("question");
-        Log.d("test", extras.toString());
         Log.d("test", mQuestion.toString());
 
         setTitle(mQuestion.getTitle());

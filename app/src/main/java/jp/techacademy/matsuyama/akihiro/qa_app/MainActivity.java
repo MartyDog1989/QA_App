@@ -28,6 +28,7 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Map;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -72,6 +73,7 @@ public class MainActivity extends AppCompatActivity {
             Question question = new Question(title, body, name, uid, dataSnapshot.getKey(), mGenre, bytes, answerArrayList);
             mQuestionArrayList.add(question);
             mAdapter.notifyDataSetChanged();
+
         }
 
         @Override
@@ -158,12 +160,12 @@ public class MainActivity extends AppCompatActivity {
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        //ログインしていなければログイン画面に遷移させる
         if(user == null) {
             navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
         } else {
             navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(true);
         }
+
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
@@ -196,10 +198,10 @@ public class MainActivity extends AppCompatActivity {
                 mAdapter.setQuestionArrayList(mQuestionArrayList);
                 mListView.setAdapter(mAdapter);
 
-                // 選択したジャンルにリスナーを登録する\`
-                /*if (mGenreRef != null) {
+                // 選択したジャンルにリスナーを登録する
+                if (mGenreRef != null) {
                     mGenreRef.removeEventListener(mEventListener);
-                }*/
+                }
                 mGenreRef = mDatabaseReference.child(Const.ContentsPATH).child(String.valueOf(mGenre));
                 mGenreRef.addChildEventListener(mEventListener);
                 return true;

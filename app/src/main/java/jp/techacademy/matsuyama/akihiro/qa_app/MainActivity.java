@@ -174,7 +174,6 @@ public class MainActivity extends AppCompatActivity {
                 if(id == R.id.nav_hobby) {
                     mToolbar.setTitle("趣味");
                     mGenre = 1;
-                    Log.d("test", mQuestionArrayList.toString());
                 } else if(id == R.id.nav_life) {
                     mToolbar.setTitle("生活");
                     mGenre = 2;
@@ -186,7 +185,6 @@ public class MainActivity extends AppCompatActivity {
                     mGenre = 4;
                 } else if(id == R.id.nav_favorite) {
                     Intent intent = new Intent(getApplicationContext(), FavoriteQuestionsActivity.class);
-                    intent.putExtra("question", mQuestionArrayList);
                     startActivity(intent);
                 }
 
@@ -220,6 +218,14 @@ public class MainActivity extends AppCompatActivity {
         mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+
+                //ログインしていなければログイン画面に遷移させる
+                if(user == null) {
+                    Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
+                    startActivity(intent);
+                    return;
+                }
                 //Questionのインスタンスを渡して質問詳細画面を起動する
                 Intent intent = new Intent(getApplicationContext(), QuestionDetailActivity.class);
                 intent.putExtra("question", mQuestionArrayList.get(position));

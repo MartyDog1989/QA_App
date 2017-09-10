@@ -2,7 +2,7 @@ package jp.techacademy.matsuyama.akihiro.qa_app;
 
 import java.io.Serializable;
 
-public class Answer {
+public class Answer implements Serializable{
     private String mBody;
     private String mName;
     private String mUid;

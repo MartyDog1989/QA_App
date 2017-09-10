@@ -17,12 +17,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-
-import org.w3c.dom.Text;
-
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 public class QuestionDetailActivity extends AppCompatActivity {
@@ -31,7 +26,6 @@ public class QuestionDetailActivity extends AppCompatActivity {
     private Question mQuestion;
     private QuestionDetailListAdapter mAdapter;
     private FirebaseAuth mAuth;
-    //private DatabaseReference mDatabaseReference;
     private DatabaseReference mFavoriteRef;
     private DatabaseReference mAnswerRef;
     private TextView text;

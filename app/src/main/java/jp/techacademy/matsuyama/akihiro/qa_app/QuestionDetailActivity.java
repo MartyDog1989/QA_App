@@ -188,9 +188,4 @@ public class QuestionDetailActivity extends AppCompatActivity {
         mAnswerRef.addChildEventListener(mEventListener);
 
     }
-
-    public String method(String str) {
-        int len = str.length();
-        return str.substring(len-20, len);
-    }
 }

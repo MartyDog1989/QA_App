@@ -40,6 +40,7 @@ public class MainActivity extends AppCompatActivity {
     private ListView mListView;
     private ArrayList<Question> mQuestionArrayList;
     private QuestionsListAdapter mAdapter;
+    private NavigationView navigationView;
 
     private ChildEventListener mEventListener = new ChildEventListener() {
         @Override
@@ -81,7 +82,7 @@ public class MainActivity extends AppCompatActivity {
             HashMap map = (HashMap) dataSnapshot.getValue();
 
             // 変更があったQuestionを探す
-            for (Question question: mQuestionArrayList) {
+            for (Question question : mQuestionArrayList) {
                 if (dataSnapshot.getKey().equals(question.getQuestionUid())) {
                     // このアプリで変更がある可能性があるのは回答(Answer)のみ
                     question.getAnswers().clear();
@@ -139,7 +140,7 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 //ログインしていなければログイン画面に遷移させる
-                if(user == null) {
+                if (user == null) {
                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(intent);
                 } else {
@@ -153,37 +154,42 @@ public class MainActivity extends AppCompatActivity {
 
         //ナビゲーションドロワーの設定
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, mToolbar, R.string.app_name, R.string.app_name);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, mToolbar, R.string.app_name, R.string.app_name) {
+            public void onDrawerOpened(View drawerView) {
+                FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
+                if (user == null) {
+                    navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
+                } else {
+                    navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(true);
+                }
+                invalidateOptionsMenu();
+            }
+        };
         drawer.addDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
-        if(user == null) {
-            navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(false);
-        } else {
-            navigationView.getMenu().findItem(R.id.nav_favorite).setVisible(true);
-        }
+        navigationView = (NavigationView) findViewById(R.id.nav_view);
 
         navigationView.setNavigationItemSelectedListener(new NavigationView.OnNavigationItemSelectedListener() {
             @Override
             public boolean onNavigationItemSelected(MenuItem item) {
                 int id = item.getItemId();
 
-                if(id == R.id.nav_hobby) {
+
+                if (id == R.id.nav_hobby) {
                     mToolbar.setTitle("趣味");
                     mGenre = 1;
-                } else if(id == R.id.nav_life) {
+                } else if (id == R.id.nav_life) {
                     mToolbar.setTitle("生活");
                     mGenre = 2;
-                } else if(id == R.id.nav_health) {
+                } else if (id == R.id.nav_health) {
                     mToolbar.setTitle("健康");
                     mGenre = 3;
-                } else if(id == R.id.nav_computer) {
+                } else if (id == R.id.nav_computer) {
                     mToolbar.setTitle("コンピューター");
                     mGenre = 4;
-                } else if(id == R.id.nav_favorite) {
+                } else if (id == R.id.nav_favorite) {
                     Intent intent = new Intent(getApplicationContext(), FavoriteQuestionsActivity.class);
                     startActivity(intent);
                 }
@@ -221,7 +227,7 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseUser user = FirebaseAuth.getInstance().getCurrentUser();
 
                 //ログインしていなければログイン画面に遷移させる
-                if(user == null) {
+                if (user == null) {
                     Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
                     startActivity(intent);
                     return;
